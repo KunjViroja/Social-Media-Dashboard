@@ -1,0 +1,45 @@
+{
+  "name": "social-media-dashboard-server",
+  "version": "1.0.0",
+  "description": "Production-ready Social Media Dashboard API - MERN Stack",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "lint": "eslint src/**/*.js --fix",
+    "test": "jest --coverage"
+  },
+  "keywords": ["social-media", "mern", "nodejs", "express", "mongodb"],
+  "author": "Kunj Viroja",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.4.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "resend": "^4.2.0",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0",
+    "xss": "^1.0.15"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
