@@ -56,8 +56,14 @@ const setTokenCookies = (res, accessToken, refreshToken) => {
  * Clear auth cookies on logout
  */
 const clearTokenCookies = (res) => {
-  res.clearCookie('access_token');
-  res.clearCookie('refresh_token');
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'strict' : 'lax',
+  };
+  res.clearCookie('access_token', cookieOptions);
+  res.clearCookie('refresh_token', cookieOptions);
 };
 
 module.exports = {

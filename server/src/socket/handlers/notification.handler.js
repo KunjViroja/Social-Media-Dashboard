@@ -3,8 +3,6 @@
  * Provides helper to push real-time notifications to connected clients
  */
 
-const { emitToUser } = require('../socket');
-
 /**
  * Push a live notification to a connected user
  * Called by controllers after creating a notification in DB
@@ -12,6 +10,8 @@ const { emitToUser } = require('../socket');
  * @param {Object} notification - The notification document
  */
 const pushNotification = async (recipientId, notification) => {
+  // Lazy require to avoid circular dependency (socket.js → this → socket.js)
+  const { emitToUser } = require('../socket');
   await emitToUser(recipientId, 'notification:new', { notification });
 };
 

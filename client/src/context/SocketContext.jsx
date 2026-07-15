@@ -37,6 +37,7 @@ export const SocketProvider = ({ children }) => {
     socket.on('connect', () => {
       console.log('🔌 Socket connected')
       socket.emit('presence:get-online')
+      socket.emit('notification:get-count')
     })
 
     socket.on('disconnect', () => {
@@ -117,6 +118,10 @@ export const SocketProvider = ({ children }) => {
     socketRef.current?.emit('chat:message:read', { messageId, conversationId })
   }
 
+  const markConversationRead = (conversationId) => {
+    socketRef.current?.emit('chat:conversation:read', { conversationId })
+  }
+
   return (
     <SocketContext.Provider value={{
       socket: socketRef.current,
@@ -127,6 +132,7 @@ export const SocketProvider = ({ children }) => {
       sendTyping,
       notifyNewMessage,
       markMessageRead,
+      markConversationRead,
     }}>
       {children}
     </SocketContext.Provider>

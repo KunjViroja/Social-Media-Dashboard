@@ -40,7 +40,11 @@ export default function Register() {
             <input
               type="text"
               placeholder="johndoe"
-              {...register('username', { required: 'Username is required', pattern: { value: /^[a-z0-9_]+$/, message: 'Lowercase and numbers/underscores only' } })}
+              {...register('username', {
+                required: 'Username is required',
+                minLength: { value: 3, message: 'Username must be at least 3 characters' },
+                pattern: { value: /^[a-z0-9_]+$/, message: 'Lowercase and numbers/underscores only' }
+              })}
               className="input-dark pl-11"
             />
           </div>

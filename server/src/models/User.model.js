@@ -94,8 +94,8 @@ const userSchema = new mongoose.Schema(
 // ─────────────────────────────────────────────
 // Indexes
 // ─────────────────────────────────────────────
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
+// username and email indexes are created automatically by unique:true on the field
+// email index is created automatically by unique:true
 userSchema.index({ createdAt: -1 });
 userSchema.index({ isBlocked: 1, isVerified: 1 });
 // Full-text search index

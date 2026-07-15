@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FiMapPin, FiLink, FiCalendar, FiEdit2 } from 'react-icons/fi'
+import { FiMapPin, FiLink, FiCalendar, FiEdit2, FiSend } from 'react-icons/fi'
 import userService from '../../services/user.service'
+import messageService from '../../services/message.service'
 import useAuth from '../../hooks/useAuth'
 import Avatar from '../../components/common/Avatar'
 import PostCard from '../../components/posts/PostCard'
@@ -10,6 +11,7 @@ import toast from 'react-hot-toast'
 
 export default function Profile() {
   const { username } = useParams()
+  const navigate = useNavigate()
   const { user: currentUser } = useAuth()
   const [profileUser, setProfileUser] = useState(null)
   const [posts, setPosts] = useState([])
@@ -21,11 +23,11 @@ export default function Profile() {
       try {
         setLoading(true)
         const profileRes = await userService.getProfile(username)
-        setProfileUser(profileRes.data.user)
-        setIsFollowing(profileRes.data.isFollowing)
+        setProfileUser(profileRes.user)
+        setIsFollowing(profileRes.isFollowing)
 
         const postsRes = await userService.getUserPosts(username)
-        setPosts(postsRes.data.posts || [])
+        setPosts(postsRes.posts || [])
       } catch (err) {
         toast.error('Failed to load profile')
       } finally {
@@ -50,6 +52,18 @@ export default function Profile() {
       }
     } catch {
       toast.error('Operation failed')
+    }
+  }
+
+  const handleMessageStart = async () => {
+    try {
+      const res = await messageService.getOrCreateConversation(profileUser._id)
+      const conv = res.conversation || res
+      if (conv?._id) {
+        navigate(`/messages/${conv._id}`)
+      }
+    } catch {
+      toast.error('Failed to start conversation')
     }
   }
 
@@ -80,12 +94,21 @@ export default function Profile() {
                 <span>Edit Profile</span>
               </Link>
             ) : (
-              <button
-                onClick={handleFollowToggle}
-                className={`btn-primary !px-6 !py-2 ${isFollowing ? '!bg-dark-800 border-white/10 hover:!bg-dark-700' : ''}`}
-              >
-                {isFollowing ? 'Following' : 'Follow'}
-              </button>
+              <>
+                <button
+                  onClick={handleMessageStart}
+                  className="btn-ghost !px-4 !py-2 flex items-center gap-2 border border-white/10"
+                >
+                  <FiSend size={15} />
+                  <span>Message</span>
+                </button>
+                <button
+                  onClick={handleFollowToggle}
+                  className={`btn-primary !px-6 !py-2 ${isFollowing ? '!bg-dark-800 border-white/10 hover:!bg-dark-700' : ''}`}
+                >
+                  {isFollowing ? 'Following' : 'Follow'}
+                </button>
+              </>
             )}
           </div>
 

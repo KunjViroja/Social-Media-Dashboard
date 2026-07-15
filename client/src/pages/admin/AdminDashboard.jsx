@@ -25,9 +25,9 @@ export default function AdminDashboard() {
   const handleBlockToggle = async (userId) => {
     try {
       const res = await api.put(`/admin/users/${userId}/block`)
-      toast.success(res.message)
+      toast.success(res.isBlocked ? 'User blocked successfully' : 'User unblocked successfully')
       setUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, isBlocked: res.data.isBlocked } : u))
+        prev.map((u) => (u._id === userId ? { ...u, isBlocked: res.isBlocked } : u))
       )
     } catch {
       toast.error('Failed to toggle block status')

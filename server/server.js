@@ -3,12 +3,15 @@
  * Initializes HTTP server, Socket.IO, and starts listening
  */
 
+// ⚠️ MUST be first — loads .env before any module reads process.env
+require('dotenv').config();
+
 const http = require('http');
 const app = require('./src/app');
 const { initSocket } = require('./src/socket/socket');
 const connectDB = require('./src/config/db');
-const connectRedis = require('./src/config/redis');
-require('dotenv').config();
+const { connectRedis } = require('./src/config/redis');
+
 
 const PORT = process.env.PORT || 5000;
 

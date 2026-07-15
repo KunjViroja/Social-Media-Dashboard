@@ -61,23 +61,26 @@ const postSlice = createSlice({
       .addCase(fetchFeed.pending, (state) => { state.isLoading = true })
       .addCase(fetchFeed.fulfilled, (state, action) => {
         state.isLoading = false
-        const { posts, pagination } = action.payload
+        const posts = action.payload?.posts || []
+        const pagination = action.payload?.pagination || {}
         const existingIds = new Set(state.feed.map((p) => p._id))
         const newPosts = posts.filter((p) => !existingIds.has(p._id))
         state.feed = [...state.feed, ...newPosts]
-        state.hasMore = pagination.hasNextPage
-        state.currentPage = pagination.page
+        state.hasMore = pagination.hasNextPage || false
+        state.currentPage = pagination.page || 1
       })
       .addCase(fetchFeed.rejected, (state, action) => {
         state.isLoading = false; state.error = action.payload
       })
       .addCase(fetchTrending.fulfilled, (state, action) => {
-        state.trending = action.payload.posts
+        state.trending = action.payload?.posts || []
       })
       .addCase(createPost.pending, (state) => { state.isCreating = true })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isCreating = false
-        state.feed = [action.payload.post, ...state.feed]
+        if (action.payload?.post) {
+          state.feed = [action.payload.post, ...state.feed]
+        }
       })
       .addCase(createPost.rejected, (state) => { state.isCreating = false })
       .addCase(deletePost.fulfilled, (state, action) => {

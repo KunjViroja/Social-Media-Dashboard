@@ -1,7 +1,7 @@
 import api from './api'
 
 const postService = {
-  createPost: (formData) => api.post('/posts', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  createPost: (formData) => api.post('/posts', formData),
   getFeed: (params) => api.get('/posts/feed', { params }),
   getTrending: (params) => api.get('/posts/trending', { params }),
   getPost: (id) => api.get(`/posts/${id}`),

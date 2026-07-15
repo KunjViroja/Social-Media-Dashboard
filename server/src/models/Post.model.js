@@ -39,7 +39,7 @@ const postSchema = new mongoose.Schema(
     viewsCount: { type: Number, default: 0, min: 0 },
 
     // ── Tags & Discovery ─────────────────────────
-    hashtags: [{ type: String, lowercase: true, index: true }],
+    hashtags: [{ type: String, lowercase: true }],
     mentions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 
     // ── Visibility ────────────────────────────────

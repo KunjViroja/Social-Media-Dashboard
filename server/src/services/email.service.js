@@ -5,16 +5,22 @@
 
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+// Lazy init — dotenv is loaded by the time any email is actually sent
+let _resend = null;
+const getResend = () => {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+};
+
+const getFrom = () => process.env.EMAIL_FROM || 'onboarding@resend.dev';
 const APP_NAME = 'Social Media Dashboard';
 
 /**
  * Send email verification link
  */
 const sendVerificationEmail = async (to, username, verifyUrl) => {
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: `Verify your ${APP_NAME} account`,
     html: `
@@ -36,8 +42,8 @@ const sendVerificationEmail = async (to, username, verifyUrl) => {
  * Send password reset email
  */
 const sendPasswordResetEmail = async (to, username, resetUrl) => {
-  await resend.emails.send({
-    from: FROM,
+  await getResend().emails.send({
+    from: getFrom(),
     to,
     subject: `Reset your ${APP_NAME} password`,
     html: `

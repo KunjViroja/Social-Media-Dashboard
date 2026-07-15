@@ -101,9 +101,8 @@ export default function RightPanel() {
         </motion.div>
       )}
 
-      {/* Footer links */}
       <p className="text-dark-500 text-xs px-2">
-        © 2024 SocialHub · Built by Kunj Viroja
+        © {new Date().getFullYear()} SocialHub · Built by Kunj Viroja
       </p>
     </aside>
   )

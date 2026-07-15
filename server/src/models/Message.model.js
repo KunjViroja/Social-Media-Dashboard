@@ -28,7 +28,7 @@ const messageSchema = new mongoose.Schema(
     attachment: {
       url: { type: String, default: '' },
       publicId: { type: String, default: '' },
-      type: { type: String, enum: ['image', 'video', 'file'], default: '' },
+      type: { type: String, enum: ['image', 'video', 'file', ''], default: '' },
       name: { type: String, default: '' },
     },
 

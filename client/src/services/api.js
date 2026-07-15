@@ -39,11 +39,28 @@ const processQueue = (error, token = null) => {
 }
 
 api.interceptors.response.use(
-  (response) => response.data,  // Return data directly
+  (response) => {
+    // If the response is standard ApiResponse, return response.data.data if present,
+    // otherwise fallback to response.data (for messages, success flags, etc.)
+    if (
+      response.data &&
+      Object.prototype.hasOwnProperty.call(response.data, 'data') &&
+      response.data.data !== null &&
+      response.data.data !== undefined
+    ) {
+      return response.data.data
+    }
+    return response.data
+  },
   async (error) => {
     const originalRequest = error.config
+    const url = originalRequest?.url || ''
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isAuthRequest = url.includes('/auth/login') ||
+                          url.includes('/auth/register') ||
+                          url.includes('/auth/refresh-token')
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
       if (isRefreshing) {
         // Queue requests while refresh is in progress
         return new Promise((resolve, reject) => {
@@ -68,7 +85,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null)
         store.dispatch(clearAuth())
-        window.location.href = '/login'
+        // Avoid redirect loop if we are already on login or register
+        if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+          window.location.href = '/login'
+        }
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false

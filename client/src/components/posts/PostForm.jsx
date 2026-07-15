@@ -37,7 +37,7 @@ export default function PostForm({ onPostCreated }) {
       setContent('')
       setMediaFile(null)
       setMediaPreview(null)
-      if (onPostCreated) onPostCreated(res.data.post)
+      if (onPostCreated) onPostCreated(res.post)
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to create post')
     } finally {
